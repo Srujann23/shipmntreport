@@ -21,44 +21,7 @@ const App = () => {
   const [ageFilter, setAgeFilter] = useState({ equals: "", lessThan: "", lessThanOrEqual: "", greaterThan: "", greaterThanOrEqual: "", notEqual: "", rangeMin: "", rangeMax: "" });
   const [salaryFilter, setSalaryFilter] = useState({ equals: "", lessThan: "", lessThanOrEqual: "", greaterThan: "", greaterThanOrEqual: "", notEqual: "", rangeMin: "", rangeMax: "" });
   const [projectsCompletedFilter, setProjectsCompletedFilter] = useState({ equals: "", lessThan: "", lessThanOrEqual: "", greaterThan: "", greaterThanOrEqual: "", notEqual: "", rangeMin: "", rangeMax: "" });
-  // useEffect(() => {
-  //   fetch('https://run.mocky.io/v3/69f60a58-3a36-48c5-a9cf-b100b015950c')
-  //     .then(response => response.text())
-  //     .then(text => {
-  //       console.log('Response', text);
-  //       try {
 
-  //         const startIndex = text.indexOf('[');
-  //         const endIndex = text.lastIndexOf(']') ;
-
-  //         if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
-  //           throw new Error('ok1');
-  //         }
-  //         const jsonString = text.substring(startIndex,endIndex+1);
-  //         console.log("test1",jsonString);
-  //         if (isValidJson(mockData)) {
-  //           const jsonData = JSON.parse(jsonString);
-  //           setData(jsonData);
-  //         } else {
-  //           throw new Error('errrrr');
-  //         }
-  //       } catch (error) {
-  //         setError('Error parsing JSON: '+error.message);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       setError('Error fetching data: '+error.message);
-  //     });
-  // }, []);
-  // 
-  // 
-  // const isValidJson = (str) => {
-  //   try {
-  //     JSON.parse(str);
-  //     return true;
-  //   } catch (e) {
-  //     return false;
-  //   }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -284,8 +247,8 @@ const App = () => {
   const handlePCFilter = (e) => setProjectsCompletedFilter({ ...projectsCompletedFilter, [e.target.name]: e.target.value });
 
 
-  const applyIntegerFilter = (value, filter) => {
-    const num = parseInt(value, 10);
+  const applyIntegerFilter = (item, filter) => {
+    const num = parseInt(item, 10);
     const { equals, lessThan, lessThanOrEqual, greaterThan, greaterThanOrEqual, notEqual, rangeMin, rangeMax } = filter;
 
     return (
@@ -296,11 +259,15 @@ const App = () => {
       (greaterThanOrEqual === "" || num >= parseInt(greaterThanOrEqual, 10)) &&
       (notEqual === "" || num !== parseInt(notEqual, 10)) &&
       (rangeMin === "" || num >= parseInt(rangeMin, 10)) &&
-      (rangeMax === "" || num <= parseInt(rangeMax, 10))
+      (rangeMax === "" || num <= parseInt(rangeMax, 10)) &&
+      applyIntegerFilter(item.id, idFilter) &&
+      applyIntegerFilter(item.age, ageFilter) &&
+      applyIntegerFilter(item.salary, salaryFilter) &&
+      applyIntegerFilter(item.projectsCompleted, projectsCompletedFilter)
     );
   };
 
-  const displayData = data.filter(item =>
+  const displaydata = data.filter(item =>
     (searchID === "" || item.id.toString().includes(searchID)) &&
     (searchName === "" || item.name.toLowerCase().includes(searchName.toLowerCase())) &&
     (searchAge === "" || item.age.toString().includes(searchAge)) &&
@@ -310,22 +277,25 @@ const App = () => {
     (searchHireDate === "" || item.hireDate.includes(searchHireDate)) &&
     (searchActive === "" || item.isActive.toString().includes(searchActive)) &&
     (searchProjectsCompleted === "" || item.projectsCompleted.toString().includes(searchProjectsCompleted)) &&
-    (searchAccessLevel === "" || item.accessLevel.toLowerCase().includes(searchAccessLevel)) &&
-    applyIntegerFilter(item.id, idFilter) &&
-    applyIntegerFilter(item.age, ageFilter) &&
-    applyIntegerFilter(item.salary, salaryFilter) &&
-    applyIntegerFilter(item.projectsCompleted, projectsCompletedFilter)
+    (searchAccessLevel === "" || item.accessLevel.toLowerCase().includes(searchAccessLevel))
   );
+
 
   return (
     <div className="App">
       {error && <p>{error}</p>}
-      <table className="table table-striped">
+
+
+      <table class="table table-dark">
         <thead>
           <tr>
             <th>ID
-              <br></br>
-              <input type="text" placeholder="Search ID" value={searchID} onChange={handleSearchID} />
+              <input
+                type="text"
+                placeholder="Search ID"
+                value={searchID}
+                onChange={handleSearchID}
+              />
               <div>
                 <input type="text" name="equals" placeholder="Equals" onChange={handleIdFilter} />
                 <input type="text" name="notEqual" placeholder="Not Equal" onChange={handleIdFilter} />
@@ -338,76 +308,82 @@ const App = () => {
               </div>
             </th>
             <th>Name
-              <br></br>
-              <input type="text" placeholder="Search Name" value={searchName} onChange={handleSearchName} />
+              <input
+                type="text"
+                placeholder="Search Name"
+                value={searchName}
+                onChange={handleSearchName}
+              />
             </th>
             <th>Age
-              <br></br>
-              <input type="text" placeholder="Search Age" value={searchAge} onChange={handleSearchAge} />
-              <div>
-                <input type="text" name="equals" placeholder="Equals" onChange={handleAgeFilterChange} />
-                <input type="text" name="notEqual" placeholder="Not Equal" onChange={handleAgeFilterChange} />
-                <input type="text" name="lessThan" placeholder="Less Than" onChange={handleAgeFilterChange} />
-                <input type="text" name="lessThanOrEqual" placeholder="Less Than or Equal" onChange={handleAgeFilterChange} />
-                <input type="text" name="greaterThan" placeholder="Greater Than" onChange={handleAgeFilterChange} />
-                <input type="text" name="greaterThanOrEqual" placeholder="Greater Than or Equal" onChange={handleAgeFilterChange} />
-                <input type="text" name="rangeMin" placeholder="Range Min" onChange={handleAgeFilterChange} />
-                <input type="text" name="rangeMax" placeholder="Range Max" onChange={handleAgeFilterChange} />
-              </div>
+              <input
+                type="text"
+                placeholder="Search Age"
+                value={searchAge}
+                onChange={handleSearchAge}
+              />
             </th>
             <th>Role
-              <br></br>
-              <input type="text" placeholder="Search Role" value={searchRole} onChange={handleSearchRole} />
+              <input
+                type="text"
+                placeholder="Search Role"
+                value={searchRole}
+                onChange={handleSearchRole}
+              />
             </th>
             <th>Hire Date
-              <br></br>
-              <input type="date" placeholder="Search Hire Date" value={searchHireDate} onChange={handleSearchHireDate} />
+              <input
+                type="date"
+                placeholder="Search Hire Date"
+                value={searchHireDate}
+                onChange={handleSearchHireDate}
+              />
             </th>
             <th>Active
-              <br></br>
-              <input type="text" placeholder="Search Active" value={searchActive} onChange={handleSearchActive} />
+              <input
+                type="text"
+                placeholder="Search Active"
+                value={searchActive}
+                onChange={handleSearchActive}
+              />
             </th>
             <th>Salary
-              <br></br>
-              <input type="text" placeholder="Search Salary" value={searchSalary} onChange={handleSearchSalary} />
-              <div>
-                <input type="text" name="equals" placeholder="Equals" onChange={handleSalaryFilter} />
-                <input type="text" name="notEqual" placeholder="Not Equal" onChange={handleSalaryFilter} />
-                <input type="text" name="lessThan" placeholder="Less Than" onChange={handleSalaryFilter} />
-                <input type="text" name="lessThanOrEqual" placeholder="Less Than or Equal" onChange={handleSalaryFilter} />
-                <input type="text" name="greaterThan" placeholder="Greater Than" onChange={handleSalaryFilter} />
-                <input type="text" name="greaterThanOrEqual" placeholder="Greater Than or Equal" onChange={handleSalaryFilter} />
-                <input type="text" name="rangeMin" placeholder="Range Min" onChange={handleSalaryFilter} />
-                <input type="text" name="rangeMax" placeholder="Range Max" onChange={handleSalaryFilter} />
-              </div>
+              <input
+                type="text"
+                placeholder="Search Salary"
+                value={searchSalary}
+                onChange={handleSearchSalary}
+              />
             </th>
             <th>Department
-              <br></br>
-              <input type="text" placeholder="Search Department" value={searchDepartment} onChange={handleSearchDepartment} />
+              <input
+                type="text"
+                placeholder="Search Department"
+                value={searchDepartment}
+                onChange={handleSearchDepartment}
+              />
             </th>
             <th>Projects Completed
-              <br></br>
-              <input type="text" placeholder="Search Projects Completed" value={searchProjectsCompleted} onChange={handlesearchPC} />
-              <div>
-                <input type="text" name="equals" placeholder="Equals" onChange={handlePCFilter} />
-                <input type="text" name="notEqual" placeholder="Not Equal" onChange={handlePCFilter} />
-                <input type="text" name="lessThan" placeholder="Less Than" onChange={handlePCFilter} />
-                <input type="text" name="lessThanOrEqual" placeholder="Less Than or Equal" onChange={handlePCFilter} />
-                <input type="text" name="greaterThan" placeholder="Greater Than" onChange={handlePCFilter} />
-                <input type="text" name="greaterThanOrEqual" placeholder="Greater Than or Equal" onChange={handlePCFilter} />
-                <input type="text" name="rangeMin" placeholder="Range Min" onChange={handlePCFilter} />
-                <input type="text" name="rangeMax" placeholder="Range Max" onChange={handlePCFilter} />
-              </div>
+              <input
+                type="text"
+                placeholder="Search Projects Completed"
+                value={searchProjectsCompleted}
+                onChange={handlesearchPC}
+              />
             </th>
             <th>Last Login</th>
             <th>Access Level
-              <br></br>
-              <input type="text" placeholder="Search Access Level" value={searchAccessLevel} onChange={handleSearchAL} />
+              <input
+                type="text"
+                placeholder="Search Access Level"
+                value={searchAccessLevel}
+                onChange={handleSearchAL}
+              />
             </th>
           </tr>
         </thead>
         <tbody>
-          {displayData.map(item => (
+          {displaydata.map(item => (
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>{item.name}</td>
