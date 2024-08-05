@@ -15,6 +15,7 @@ const App = () => {
   const [searchSalary, setSearchSalary] = useState("");
   const [searchDepartment, setSearchDepartment] = useState("");
   const [searchProjectsCompleted, setProjectsCompleted] = useState("");
+  const [searchAccessLevel, setAccessLevel] = useState("");
 
 
   useEffect(() => {
@@ -234,6 +235,7 @@ const App = () => {
   const handleSearchHireDate = (e) => setSearchHireDate(e.target.value);
   const handleSearchActive = (e) => setSearchActive(e.target.value);
   const handlesearchProjectsCompleted = (e) => setProjectsCompleted(e.target.value);
+  const handlesearchAccessLevel = (e) => setAccessLevel(e.target.value);
 
 
 
@@ -247,7 +249,8 @@ const App = () => {
     (searchDepartment === "" || item.department.toLowerCase().includes(searchDepartment.toLowerCase())) && 
     (searchHireDate === "" || item.hireDate.includes(searchHireDate)) &&
     (searchActive === "" || item.isActive.toString().includes(searchActive)) &&
-    (searchProjectsCompleted === "" || item.projectsCompleted.toString().includes(searchProjectsCompleted))
+    (searchProjectsCompleted === "" || item.projectsCompleted.toString().includes(searchProjectsCompleted)) &&
+    (searchAccessLevel === "" || item.accessLevel.toLowerCase().includes(searchAccessLevel)) 
   );
 
 
@@ -332,7 +335,14 @@ const App = () => {
               />
             </th>
             <th>Last Login</th>
-            <th>Access Level</th>
+            <th>Access Level
+            <input
+                type="text"
+                placeholder="Search Access Level"
+                value={searchAccessLevel}
+                onChange={handlesearchAccessLevel}
+              />
+            </th>
           </tr>
         </thead>
         <tbody>
