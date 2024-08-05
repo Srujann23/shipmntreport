@@ -6,6 +6,16 @@ const App = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
+  const [searchID, setSearchID] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [searchAge, setSearchAge] = useState("");
+  const [searchRole, setSearchRole] = useState("");
+  const [searchHireDate, setSearchHireDate] = useState("");
+  const [searchActive, setSearchActive] = useState("");
+  const [searchSalary, setSearchSalary] = useState("");
+  const [searchDepartment, setSearchDepartment] = useState("");
+  const [searchProjectsCompleted, setProjectsCompleted] = useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -215,35 +225,112 @@ const App = () => {
     fetchData();
   }, []);
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
+  const handleSearchID = (e) => setSearchID(e.target.value);
+  const handleSearchName = (e) => setSearchName(e.target.value);
+  const handleSearchAge = (e) => setSearchAge(e.target.value);
+  const handleSearchSalary = (e) => setSearchSalary(e.target.value);
+  const handleSearchRole = (e) => setSearchRole(e.target.value);
+  const handleSearchDepartment = (e) => setSearchDepartment(e.target.value);
+  const handleSearchHireDate = (e) => setSearchHireDate(e.target.value);
+  const handleSearchActive = (e) => setSearchActive(e.target.value);
+  const handlesearchProjectsCompleted = (e) => setProjectsCompleted(e.target.value);
+
+
+
 
   const displaydata = data.filter(item =>
-    item.role.toLowerCase().includes(search.toLowerCase())
+    (searchID === "" || item.id.toString().includes(searchID)) &&
+    (searchName === "" || item.name.toLowerCase().includes(searchName.toLowerCase())) &&
+    (searchAge === "" || item.age.toString().includes(searchAge)) &&
+    (searchSalary === "" || item.salary.toString().includes(searchSalary)) &&
+    (searchRole === "" || item.role.toLowerCase().includes(searchRole.toLowerCase())) &&
+    (searchDepartment === "" || item.department.toLowerCase().includes(searchDepartment.toLowerCase())) && 
+    (searchHireDate === "" || item.hireDate.includes(searchHireDate)) &&
+    (searchActive === "" || item.isActive.toString().includes(searchActive)) &&
+    (searchProjectsCompleted === "" || item.projectsCompleted.toString().includes(searchProjectsCompleted))
   );
+
 
   return (
     <div className="App">
       {error && <p>{error}</p>}
-      <input
-        type="text"
-        placeholder="Search"
-        value={search}
-        onChange={handleSearch}
-      />
+
+
       <table class="table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Role</th>
-            <th>Hire Date</th>
-            <th>Active</th>
-            <th>Salary</th>
-            <th>Department</th>
-            <th>Projects Completed</th>
+            <th>ID
+            <input
+                type="text"
+                placeholder="Search ID"
+                value={searchID}
+                onChange={handleSearchID}
+              />
+            </th>
+            <th>Name
+            <input
+                type="text"
+                placeholder="Search Name"
+                value={searchName}
+                onChange={handleSearchName}
+              />
+            </th>
+            <th>Age
+            <input
+                type="text"
+                placeholder="Search Age"
+                value={searchAge}
+                onChange={handleSearchAge}
+              />
+            </th>
+            <th>Role
+            <input
+                type="text"
+                placeholder="Search Role"
+                value={searchRole}
+                onChange={handleSearchRole}
+              />
+            </th>
+            <th>Hire Date
+            <input
+                type="date"
+                placeholder="Search Hire Date"
+                value={searchHireDate}
+                onChange={handleSearchHireDate}
+              />
+            </th>
+            <th>Active
+            <input
+                type="text"
+                placeholder="Search Active"
+                value={searchActive}
+                onChange={handleSearchActive}
+              />
+            </th>
+            <th>Salary
+            <input
+                type="text"
+                placeholder="Search Salary"
+                value={searchSalary}
+                onChange={handleSearchSalary}
+              />
+            </th>
+            <th>Department
+            <input
+                type="text"
+                placeholder="Search Department"
+                value={searchDepartment}
+                onChange={handleSearchDepartment}
+              />
+            </th>
+            <th>Projects Completed
+            <input
+                type="text"
+                placeholder="Search Projects Completed"
+                value={searchProjectsCompleted}
+                onChange={handlesearchProjectsCompleted}
+              />
+            </th>
             <th>Last Login</th>
             <th>Access Level</th>
           </tr>
